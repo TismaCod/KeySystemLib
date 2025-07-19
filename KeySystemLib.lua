@@ -1,6 +1,6 @@
 local KeySystemLib = {}
 
-function KeySystemLib.show(config)
+function KeySystemLib.CreateWindow(config)
     if not config or not config.title then
         warn("[KeySystemLib] Missing required parameter: title is mandatory.")
         return
