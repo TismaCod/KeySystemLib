@@ -216,3 +216,12 @@ function KeySystemLib.CreateWindow(config)
 end
 
 _G.KeySystemLib = KeySystemLib
+
+-- Exemple d'utilisation :
+-- _G.KeySystemLib.CreateWindow({
+--     title = "My Script",
+--     rawUrl = "https://...",
+--     keys = {"key1", "key2"},
+--     showCopyLink = true,
+--     copyLinkValue = "https://key-system.temp-thisma.workers.dev/"
+-- }) 
