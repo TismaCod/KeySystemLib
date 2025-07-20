@@ -1,6 +1,18 @@
+-- Initialiser la librairie
 KeySystemLib = {}
+_G.KeySystemLib_LOADED = true
 
 local currentWindow = nil
+
+-- Fonction pour fermer la fenêtre actuelle
+function KeySystemLib.CloseCurrentWindow()
+    if currentWindow and currentWindow.Parent then
+        currentWindow:Destroy()
+        currentWindow = nil
+        return true
+    end
+    return false
+end
 
 function KeySystemLib.CreateWindow(config)
     if not config or not config.title then
@@ -20,11 +32,8 @@ function KeySystemLib.CreateWindow(config)
     local Players = game:GetService("Players")
     local player = Players.LocalPlayer
 
-    -- Fermer la fenêtre précédente si elle existe
-    if currentWindow and currentWindow.Parent then
-        currentWindow:Destroy()
-        currentWindow = nil
-    end
+    -- Fermer automatiquement la fenêtre précédente si elle existe
+    KeySystemLib.CloseCurrentWindow()
 
     local function randomName()
         local chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -114,10 +123,7 @@ function KeySystemLib.CreateWindow(config)
         Close.TextColor3 = Color3.fromRGB(255,255,255)
     end)
     Close.MouseButton1Click:Connect(function()
-        ScreenGui:Destroy()
-        if currentWindow == ScreenGui then
-            currentWindow = nil
-        end
+        KeySystemLib.CloseCurrentWindow()
     end)
 
     local Title = Instance.new("TextLabel", Main)
@@ -216,10 +222,7 @@ function KeySystemLib.CreateWindow(config)
             Status.Text = "Key valid!"
             Status.TextColor3 = Color3.fromRGB(80, 200, 80)
             wait(1)
-            ScreenGui:Destroy()
-            if currentWindow == ScreenGui then
-                currentWindow = nil
-            end
+            KeySystemLib.CloseCurrentWindow()
             _G.UserKey = key
             if not functionKeyCheckers[checker2](_G.UserKey) then error("Key bypass detected") end
             validated = true
@@ -229,11 +232,20 @@ function KeySystemLib.CreateWindow(config)
             Status.TextColor3 = Color3.fromRGB(255,80,80)
         end
     end)
-    
+
+    -- Bloque l'exécution tant que la clé n'est pas validée
     while not validated do
         wait()
     end
     return validatedKey
+end
+
+-- Fonction pour forcer le rechargement (mode debug)
+function KeySystemLib.Reload()
+    _G.KeySystemLib_LOADED = nil
+    _G.KeySystemLib_DEBUG = true
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/TismaCod/KeySystemLib/main/KeySystemLib.lua"))()
+    _G.KeySystemLib_DEBUG = nil
 end
 
 KeySystemLib = KeySystemLib 
