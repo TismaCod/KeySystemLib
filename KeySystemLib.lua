@@ -1,26 +1,30 @@
-local KeySystemLib = {}
+KeySystemLib = {}
+
+local currentWindow = nil
 
 function KeySystemLib.CreateWindow(config)
     if not config or not config.title then
         warn("[KeySystemLib] Missing required parameter: title is mandatory.")
         return
     end
-    local showCopyLink = config.showCopyLink or false
     local copyLinkValue = config.copyLinkValue or ""
+    local showCopyLink = (copyLinkValue ~= "") or config.showCopyLink or false
     local title = config.title
     local rawUrl = config.rawUrl
     local keys = config.keys or {}
 
-    if copyLinkValue ~= "" and not showCopyLink then
-        warn("[KeySystemLib] copyLinkValue is set but showCopyLink is false. Set showCopyLink to true or remove copyLinkValue.")
-        return
-    end
     if (not rawUrl or rawUrl == "") and (#keys == 0) then
         warn("[KeySystemLib] No rawUrl or keys provided. Any key (even empty) will be accepted.")
     end
 
     local Players = game:GetService("Players")
     local player = Players.LocalPlayer
+
+    -- Fermer la fenêtre précédente si elle existe
+    if currentWindow and currentWindow.Parent then
+        currentWindow:Destroy()
+        currentWindow = nil
+    end
 
     local function randomName()
         local chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -71,6 +75,7 @@ function KeySystemLib.CreateWindow(config)
     ScreenGui.Parent = player.PlayerGui
     ScreenGui.IgnoreGuiInset = true
     ScreenGui.DisplayOrder = 100
+    currentWindow = ScreenGui
 
     local Main = Instance.new("Frame", ScreenGui)
     Main.Size = UDim2.new(0, 440, 0, 200)
@@ -110,6 +115,9 @@ function KeySystemLib.CreateWindow(config)
     end)
     Close.MouseButton1Click:Connect(function()
         ScreenGui:Destroy()
+        if currentWindow == ScreenGui then
+            currentWindow = nil
+        end
     end)
 
     local Title = Instance.new("TextLabel", Main)
@@ -198,6 +206,9 @@ function KeySystemLib.CreateWindow(config)
         end)
     end
 
+    local validated = false
+    local validatedKey = nil
+
     Validate.MouseButton1Click:Connect(function()
         local key = KeyBox.Text
         local valid, msg = functionKeyCheckers[checker1](key)
@@ -206,22 +217,23 @@ function KeySystemLib.CreateWindow(config)
             Status.TextColor3 = Color3.fromRGB(80, 200, 80)
             wait(1)
             ScreenGui:Destroy()
+            if currentWindow == ScreenGui then
+                currentWindow = nil
+            end
             _G.UserKey = key
             if not functionKeyCheckers[checker2](_G.UserKey) then error("Key bypass detected") end
+            validated = true
+            validatedKey = key
         else
             Status.Text = msg or "Invalid key."
             Status.TextColor3 = Color3.fromRGB(255,80,80)
         end
     end)
+    
+    while not validated do
+        wait()
+    end
+    return validatedKey
 end
 
-_G.KeySystemLib = KeySystemLib
-
--- Exemple d'utilisation :
--- _G.KeySystemLib.CreateWindow({
---     title = "My Script",
---     rawUrl = "https://...",
---     keys = {"key1", "key2"},
---     showCopyLink = true,
---     copyLinkValue = "https://key-system.temp-thisma.workers.dev/"
--- }) 
+KeySystemLib = KeySystemLib 
