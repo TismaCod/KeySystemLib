@@ -1,11 +1,5 @@
--- Protection contre le chargement multiple
-if _G.KeySystemLib_LOADED then
-    return
-end
-
 -- Initialiser la librairie
 KeySystemLib = {}
-_G.KeySystemLib_LOADED = true
 
 local currentWindow = nil
 
@@ -243,14 +237,6 @@ function KeySystemLib.CreateWindow(config)
         wait()
     end
     return validatedKey
-end
-
--- Fonction pour forcer le rechargement (mode debug)
-function KeySystemLib.Reload()
-    _G.KeySystemLib_LOADED = nil
-    _G.KeySystemLib_DEBUG = true
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/TismaCod/KeySystemLib/main/KeySystemLib.lua"))()
-    _G.KeySystemLib_DEBUG = nil
 end
 
 KeySystemLib = KeySystemLib 
