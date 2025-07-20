@@ -49,7 +49,18 @@ function KeySystemLib.CreateWindow(config)
 
     local functionKeyCheckers = {}
     functionKeyCheckers[checker1] = function(userKey)
-        if userKey == "" then return true end
+        -- Vérifier si des clés sont définies
+        local hasKeys = (rawUrl and rawUrl ~= "") or (keys and #keys > 0)
+        
+        -- Si des clés sont définies, une clé vide n'est pas valide
+        if userKey == "" then
+            if hasKeys then
+                return false, "Please enter a key"
+            else
+                return true -- Accepte une clé vide seulement si aucune clé n'est définie
+            end
+        end
+        
         if rawUrl and rawUrl ~= "" then
             local success, result = pcall(function()
                 return game:HttpGet(rawUrl)
