@@ -1,40 +1,93 @@
-# KeySystemLib – Roblox Key System Library
+# KeySystemLib - Roblox Key System Library
 
-**KeySystemLib** est une librairie modulaire pour Roblox permettant d’ajouter facilement un système de validation de clé à vos jeux ou scripts, avec une interface moderne et personnalisable.
+Une librairie Lua modulaire pour créer des systèmes de clés dans Roblox avec une interface utilisateur moderne.
 
-## Fonctionnalités principales
+## Installation
 
-- **Interface utilisateur moderne** (style Rayfield, opaque, centrée, boutons personnalisables)
-- **Validation de clé** :
-  - Depuis une liste locale (`keys`)
-  - Depuis un lien RAW distant (`rawUrl`)
-  - Ou les deux en même temps
-- **Bouton “Copy Link”** optionnel, avec valeur personnalisable
-- **Configuration simple** via une seule fonction
-- **Obfuscation légère** des fonctions de vérification
-- **Aucune dépendance externe**
-
-## Utilisation
-
+### Méthode 1 : Via loadstring (Recommandée)
 ```lua
-local KeySystemLib = require(path.to.test)
-KeySystemLib.show({
-    title = "My Script",
-    rawUrl = "https://...", -- optionnel
-    keys = {"key1", "key2"}, -- optionnel
-    showCopyLink = true, -- optionnel
-    copyLinkValue = "https://key-system.temp-thisma.workers.dev/" -- optionnel
+-- Charger la librairie depuis GitHub
+loadstring(game:HttpGet("https://raw.githubusercontent.com/TON_USERNAME/KeySystemLib/main/KeySystemLib.lua"))()
+
+-- Utiliser la librairie
+local userKey = KeySystemLib.CreateWindow({
+    title = "Mon Script",
+    keys = {"key1", "key2", "key3"},
+    copyLinkValue = "https://key-system.temp-thisma.workers.dev/",
+    showCopyLink = true
+})
+
+print("Clé validée :", userKey)
+```
+
+### Méthode 2 : Clés depuis un Gist GitHub
+```lua
+loadstring(game:HttpGet("https://raw.githubusercontent.com/TON_USERNAME/KeySystemLib/main/KeySystemLib.lua"))()
+
+local userKey = KeySystemLib.CreateWindow({
+    title = "Mon Script",
+    rawUrl = "https://gist.githubusercontent.com/TON_USERNAME/GIST_ID/raw/keys_check",
+    copyLinkValue = "https://key-system.temp-thisma.workers.dev/",
+    showCopyLink = true
 })
 ```
 
-- **title** (obligatoire) : Titre affiché sur l’UI
-- **rawUrl** (optionnel) : Lien vers une liste de clés distante (RAW)
-- **keys** (optionnel) : Liste de clés locale
-- **showCopyLink** (optionnel, défaut : false) : Affiche le bouton “Copy Link”
-- **copyLinkValue** (optionnel) : Valeur copiée par le bouton
+## Configuration
 
-## Remarques
+| Paramètre | Type | Requis | Description |
+|-----------|------|--------|-------------|
+| `title` | string | ✅ | Titre de la fenêtre |
+| `keys` | table | ❌ | Liste de clés locales |
+| `rawUrl` | string | ❌ | URL RAW d'un fichier contenant les clés |
+| `copyLinkValue` | string | ❌ | URL à copier avec le bouton "Copy Link" |
+| `showCopyLink` | boolean | ❌ | Afficher le bouton "Copy Link" |
 
-- Si aucune clé n’est fournie (ni `rawUrl` ni `keys`), toute clé (même vide) sera acceptée.
-- Si `copyLinkValue` est défini mais que `showCopyLink` est désactivé, la librairie affiche une erreur et ne s’affiche pas.
-- Compatible avec les exploits supportant `loadstring` et l’import manuel via `require()`.
+## Fonctionnalités
+
+- ✅ Interface utilisateur moderne style Rayfield
+- ✅ Validation de clés locales ou depuis URL
+- ✅ Bouton "Copy Link" pour copier des URLs
+- ✅ Blocage de l'exécution jusqu'à validation
+- ✅ Protection anti-bypass avec vérifications multiples
+- ✅ Noms de fonctions aléatoires pour l'obfuscation
+- ✅ Gestion des erreurs et messages d'état
+
+## Exemple Complet
+
+```lua
+-- Charger la librairie
+loadstring(game:HttpGet("https://raw.githubusercontent.com/TON_USERNAME/KeySystemLib/main/KeySystemLib.lua"))()
+
+-- Attendre que la librairie soit chargée
+wait(0.1)
+
+-- Vérifier que la librairie est bien chargée
+if not KeySystemLib then
+    error("KeySystemLib n'a pas pu être chargée!")
+end
+
+-- Utiliser la librairie
+local userKey = KeySystemLib.CreateWindow({
+    title = "EzPiggy Script",
+    keys = {"test123", "demo456", "key789"},
+    copyLinkValue = "https://key-system.temp-thisma.workers.dev/",
+    showCopyLink = true
+})
+
+-- Le script continue seulement si une clé valide est entrée
+print("Clé validée :", userKey)
+print("Script démarré avec succès!")
+
+-- Ton code principal ici...
+```
+
+## Déploiement sur GitHub
+
+1. **Crée un nouveau repository** sur GitHub
+2. **Uploade le fichier `KeySystemLib.lua`** dans le repository
+3. **Remplace `TON_USERNAME`** dans les exemples par ton nom d'utilisateur GitHub
+4. **Utilise l'URL RAW** : `https://raw.githubusercontent.com/TON_USERNAME/KeySystemLib/main/KeySystemLib.lua`
+
+## Support
+
+Pour toute question ou problème, crée une issue sur le repository GitHub. 
