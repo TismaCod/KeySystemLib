@@ -7,7 +7,7 @@ Une librairie Lua modulaire pour créer des systèmes de clés dans Roblox avec 
 ### Méthode 1 : Via loadstring (Recommandée)
 ```lua
 -- Charger la librairie depuis GitHub
-loadstring(game:HttpGet("https://raw.githubusercontent.com/TON_USERNAME/KeySystemLib/main/KeySystemLib.lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/TismaCod/KeySystemLib/main/KeySystemLib.lua"))()
 
 -- Utiliser la librairie
 local userKey = KeySystemLib.CreateWindow({
@@ -22,7 +22,7 @@ print("Clé validée :", userKey)
 
 ### Méthode 2 : Clés depuis un Gist GitHub
 ```lua
-loadstring(game:HttpGet("https://raw.githubusercontent.com/TON_USERNAME/KeySystemLib/main/KeySystemLib.lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/TismaCod/KeySystemLib/main/KeySystemLib.lua"))()
 
 local userKey = KeySystemLib.CreateWindow({
     title = "Mon Script",
@@ -42,6 +42,14 @@ local userKey = KeySystemLib.CreateWindow({
 | `copyLinkValue` | string | ❌ | URL à copier avec le bouton "Copy Link" |
 | `showCopyLink` | boolean | ❌ | Afficher le bouton "Copy Link" |
 
+## Fonctions Disponibles
+
+### `KeySystemLib.CreateWindow(config)`
+Crée une nouvelle fenêtre de saisie de clé. Ferme automatiquement toute fenêtre précédente.
+
+### `KeySystemLib.CloseCurrentWindow()`
+Ferme manuellement la fenêtre actuelle si elle existe. Retourne `true` si une fenêtre a été fermée, `false` sinon.
+
 ## Fonctionnalités
 
 - ✅ Interface utilisateur moderne style Rayfield
@@ -51,12 +59,26 @@ local userKey = KeySystemLib.CreateWindow({
 - ✅ Protection anti-bypass avec vérifications multiples
 - ✅ Noms de fonctions aléatoires pour l'obfuscation
 - ✅ Gestion des erreurs et messages d'état
+- ✅ Fermeture automatique des fenêtres précédentes
+- ✅ Validation sécurisée des clés vides
+- ✅ Mode "open" quand aucune clé n'est définie
+
+## Logique de Validation
+
+### Avec des clés définies (`keys` ou `rawUrl`)
+- ❌ **Clé vide** = `"Please enter a key"`
+- ✅ **Clé valide** = Acceptée
+- ❌ **Clé invalide** = `"Invalid key"`
+
+### Sans clés définies (aucune clé ni URL)
+- ✅ **Clé vide** = Acceptée (mode "open")
+- ✅ **N'importe quelle clé** = Acceptée
 
 ## Exemple Complet
 
 ```lua
 -- Charger la librairie
-loadstring(game:HttpGet("https://raw.githubusercontent.com/TON_USERNAME/KeySystemLib/main/KeySystemLib.lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/TismaCod/KeySystemLib/main/KeySystemLib.lua"))()
 
 -- Attendre que la librairie soit chargée
 wait(0.1)
@@ -80,14 +102,3 @@ print("Script démarré avec succès!")
 
 -- Ton code principal ici...
 ```
-
-## Déploiement sur GitHub
-
-1. **Crée un nouveau repository** sur GitHub
-2. **Uploade le fichier `KeySystemLib.lua`** dans le repository
-3. **Remplace `TON_USERNAME`** dans les exemples par ton nom d'utilisateur GitHub
-4. **Utilise l'URL RAW** : `https://raw.githubusercontent.com/TON_USERNAME/KeySystemLib/main/KeySystemLib.lua`
-
-## Support
-
-Pour toute question ou problème, crée une issue sur le repository GitHub. 
