@@ -1,3 +1,8 @@
+-- Protection contre le chargement multiple
+if _G.KeySystemLib_LOADED then
+    return
+end
+
 -- Initialiser la librairie
 KeySystemLib = {}
 _G.KeySystemLib_LOADED = true
